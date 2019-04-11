@@ -102,7 +102,7 @@ app.get("/", (req, res) => {
   res.send({ message: "hello world" });
 });
 
-server.listen(8080, () => {
+server.listen(process.env.NODE_PORT, () => {
   console.log("- Server listening on port 8080");
 });
 
