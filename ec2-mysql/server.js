@@ -98,6 +98,10 @@ app.post("/buyItem", async (req, res, next) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.send({ message: "hello world" });
+});
+
 server.listen(8080, () => {
   console.log("- Server listening on port 8080");
 });
