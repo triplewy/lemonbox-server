@@ -1,6 +1,6 @@
 #!/bin/bash
 git pull
-cd ec2-mysql
+cd /home/ubuntu/lemonbox-server/ec2-mysql
 npm i
 cd ..
 sudo systemctl restart lemonbox
