@@ -105,7 +105,7 @@ app.post("/code/update", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.send({ message: "hello world" });
+  res.send({ message: "New hello world message!" });
 });
 
 server.listen(process.env.NODE_PORT, () => {
