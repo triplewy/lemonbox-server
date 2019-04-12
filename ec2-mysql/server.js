@@ -8,6 +8,7 @@ const mysql = require("mysql");
 const aws = require("aws-sdk");
 const uuidv1 = require("uuid/v1");
 const cors = require("cors");
+const shell = require("shelljs");
 const { promisify } = require("util");
 
 const app = express();
@@ -98,12 +99,17 @@ app.post("/buyItem", async (req, res, next) => {
   }
 });
 
+app.post("/code/update", (req, res) => {
+  console.log("- Request received:", req.method.cyan, "/code/update");
+  return shell.exec("../webhook.sh");
+});
+
 app.get("/", (req, res) => {
   res.send({ message: "hello world" });
 });
 
 server.listen(process.env.NODE_PORT, () => {
-  console.log("- Server listening on port 8080");
+  console.log(`- Server listening on port ${process.env.NODE_PORT}`);
 });
 
 app.use((err, req, res, next) => {
