@@ -101,6 +101,7 @@ app.post("/buyItem", async (req, res, next) => {
 
 app.post("/code/update", (req, res) => {
   console.log("- Request received:", req.method.cyan, "/code/update");
+  res.send({ message: "received" });
   return shell.exec(process.env.WEBHOOK_PATH);
 });
 
