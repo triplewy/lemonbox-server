@@ -21,5 +21,12 @@ module.exports = {
         trailingComma: "es5",
       }
     ],
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "classes": true
+      }
+    ]
   },
 };
