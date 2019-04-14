@@ -15,15 +15,13 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 const mysqlRoutes = require("./routes/mysql");
 const dynamoRoutes = require("./routes/dynamo");
-const gitRoutes = require("./routes/git");
 
-app.get("/", (req, res) => {
-  res.send({ message: "New hello world message!" });
+app.get("/health", (req, res) => {
+  res.send({ status: "OK" });
 });
 
 app.use("/mysql", mysqlRoutes(express));
 app.use("/dynamo", dynamoRoutes(express));
-app.use("/code", gitRoutes(express));
 
 server.listen(process.env.NODE_PORT, () => {
   console.log(`- Server listening on port ${process.env.NODE_PORT}`);

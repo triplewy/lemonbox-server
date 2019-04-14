@@ -1,0 +1,30 @@
+version: 1.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/ubuntu/lemonbox-server
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+
+hooks:
+  ApplicationStop:
+    - location: /home/ubuntu/codedeploy-scripts/applicationStop.sh
+      timeout: 10
+      runas: ubuntu
+  AfterInstall:
+    - location: /home/ubuntu/codedeploy-scripts/afterInstall.sh
+      timeout: 60
+      runas: ubuntu
+  ApplicationStart:
+    - location: /home/ubuntu/codedeploy-scripts/applicationStart.sh
+      timeout: 60
+      runas: ubuntu
+  ValidateService:
+    - location: /home/ubuntu/codedeploy-scripts/validateService.sh
+      timeout: 10
+      runas: ubuntu
