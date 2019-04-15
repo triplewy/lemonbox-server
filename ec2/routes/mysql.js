@@ -30,7 +30,7 @@ serverAlive();
 module.exports = express => {
   const router = express.Router();
 
-  router.post("/buyItem", async (req, res, next) => {
+  router.post("/buy", async (req, res, next) => {
     console.log(req.method.cyan, req.originalUrl);
 
     try {
