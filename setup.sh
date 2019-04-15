@@ -8,35 +8,6 @@ yes | sudo apt install git
 
 cd /home/ubuntu
 
-mkdir codedeploy-scripts
-
-echo '#!/bin/bash
-cd /home/ubuntu/lemonbox-server/ec2
-npm i
-' > /home/ubuntu/codedeploy-scripts/afterInstall.sh
-
-echo '#!/bin/bash
-sudo systemctl start lemonbox
-' > /home/ubuntu/codedeploy-scripts/applicationStart.sh
-
-echo '#!/bin/bash
-sudo systemctl stop lemonbox
-' > /home/ubuntu/codedeploy-scripts/applicationStop.sh
-
-echo '#!/bin/bash
-RESULT=$(curl http://localhost:8081/health)
-
-if [[ "$RESULT" =~ "OK" ]]; then
-  echo "SUCCESS"
-  exit 0
-else
-  echo "FAIL"
-  exit 1
-fi
-' > /home/ubuntu/codedeploy-scripts/validateService.sh
-
-chmod +x /home/ubuntu/codedeploy-scripts/*
-
 git clone https://github.com/triplewy/lemonbox-server.git && cd /home/ubuntu/lemonbox-server/ec2 && npm i
 
 cd /home/ubuntu
