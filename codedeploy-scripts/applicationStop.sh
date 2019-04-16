@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo systemctl stop lemonbox
+sudo service lemonbox stop

@@ -9,15 +9,18 @@ const dbConfig = {
   timezone: "utc",
 };
 
-const conn = mysql.createConnection(dbConfig);
-const query = promisify(conn.query).bind(conn);
+const pool = mysql.createPool({
+  connectionLimit: 500,
+  ...dbConfig,
+});
 
-conn.connect();
+const getConnection = promisify(pool.getConnection).bind(pool);
+const poolQuery = promisify(pool.query).bind(pool);
 
 function serverAlive() {
   setTimeout(async () => {
     try {
-      await query("SELECT 1");
+      await poolQuery("SELECT 1");
       serverAlive();
     } catch (err) {
       console.error(err);
@@ -44,11 +47,11 @@ module.exports = express => {
         productMap[item.productId] = item.quantity;
       });
 
-      let selectTime = Date.now();
+      const conn = await getConnection();
+      const query = promisify(conn.query).bind(conn);
       const productsQuery = await query("SELECT id, productName, quantity, price FROM product WHERE id IN ?", [
         [products.map(item => item.productId)],
       ]);
-      selectTime = Date.now() - selectTime;
 
       let totalPrice = 0;
       productsQuery.forEach(item => {
@@ -58,7 +61,6 @@ module.exports = express => {
         totalPrice += productMap[item.id] * item.price;
       });
 
-      let transactionTime = Date.now();
       try {
         await query("START TRANSACTION;");
 
@@ -68,17 +70,16 @@ module.exports = express => {
 
         await query("INSERT INTO productOrder (productId, orderId, num) VALUES ?;", [productOrders]);
         await query("COMMIT;");
+        conn.release();
       } catch (e) {
         await query("ROLLBACK;");
+        conn.release();
         return next(e);
       }
-      transactionTime = Date.now() - transactionTime;
 
       return res.send({
         message: "success",
         processTime: Date.now() - start,
-        selectTime,
-        transactionTime,
       });
     } catch (e) {
       return next(e);
